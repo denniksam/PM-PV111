@@ -11,6 +11,12 @@ namespace App
     {
         public String Ellipsis(String input, int maxLength = 80)
         {
+            if (input == null) 
+                throw new ArgumentNullException(nameof(input));
+
+            if(maxLength >= input.Length)
+                return input;
+
             return $"{input[0..maxLength]}...";
         }
 
@@ -21,7 +27,7 @@ namespace App
             // return "1 000";
             // 4. Для більшої кількості тестів - складаємо алгоритм.
             /* 
-             // для цілих чисел - можна використати аріфметичні операції
+             // для цілих чисел - можна використати арифметичні операції
             StringBuilder sb = new();
             while (number != 0)  // 123456
             {

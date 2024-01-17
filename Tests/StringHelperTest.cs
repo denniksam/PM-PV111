@@ -72,9 +72,54 @@ namespace Tests
                 );
             }
         }
+
+
+        [TestMethod]
+        public void EllipsisErrorsTest()
+        {
+            StringHelper stringHelper = new();
+            Assert.IsNotNull(stringHelper, "New StringHelper should be Non-Null");
+            
+            var ex = Assert.ThrowsException<ArgumentNullException>(
+                () => stringHelper.Ellipsis(null!),
+                "Ellipsis(null!) --> Exception"
+            );
+            // вимагаємо, щоб повідомлення винятку містило назву параметра "input"
+            Assert.IsTrue(
+                ex.Message.Contains("input"),
+                $"ArgumentNullException must contain 'input' msg='{ex.Message}' " 
+            );
+            // за відсутності Assert.NotThrows безпечний код можна
+            // не оточувати Assert, поява виключення провалить тест
+            stringHelper.Ellipsis("123");
+            // або прямо використати try-catch
+            try
+            {
+                stringHelper.Ellipsis("123", 20);
+            }
+            catch
+            {
+                Assert.Fail("Ellipsis('123', 20) must NOT throw exception ");
+            }
+            // Сумнівний випадок - String.Empty
+            Assert.IsNotNull(
+                stringHelper.Ellipsis(String.Empty)
+            );  // ще один варіант для Assert.NotThrows
+        }
+
     }
 }
-/* На прикладі задачі розділення розрядів у довгих числах:
- * 3750387326 -> 3 750 387 326
- * Spacefy(int) -> String
+/* Д.З. UrlCombine
+ * - реалізувати перевірку аргументів на null
+ *  = якщо перший null - виняток у будь-якому випадку
+ *  = якщо другий null, то це припустимо при ненульовому першому
+ * - реалізувати перевірку на String.Empty 
+ *  = якщо обидва порожні - повернути String.Empty
+ *  = якщо перший не порожній, другий порожній - нормально
+ *  = перший порожній, другий ні - виняток
+ * * узагальнити метод UrlCombine на випадок довільної кількості
+ *    складових частин (аргументів). Забезпечити перевірку за правилами, що 
+ *    порожні (у т.ч. null) елементи допускаються тільки якщо ніде 
+ *    за ними немає непорожніх, а також всі разом не можуть 
+ *    порожніми
  */
